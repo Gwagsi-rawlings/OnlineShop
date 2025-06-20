@@ -1,0 +1,1413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EventHub - Online Event Booking System</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="sticky-top navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#" onclick="showPage('home')">
+                <i class="bi bi-calendar-event"></i> EventHub
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" title="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="me-auto navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showPage('home')">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showPage('events')">Events</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showPage('eventDetails')">Details</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showPage('dashboard')">Dashboard</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav">
+                    <li class="nav-item" id="cartNav">
+                        <a class="nav-link" href="#" onclick="showPage('cart')">
+                            <i class="bi bi-cart"></i> Cart <span class="bg-danger badge cart-count">0/span>
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown" id="userDropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle"></i> <span id="username">User</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#" onclick="showPage('dashboard')"><i class="bi bi-speedometer2"></i> Dashboard</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="showPage('bookings')"><i class="bi bi-ticket-perforated"></i> My Bookings</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="showPage('profile')"><i class="bi bi-person"></i> Profile</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" onclick="logout()"><i class="bi-box-arrow-right bi"></i> Logout</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item" id="loginNav">
+                        <a class="nav-link" href="#" onclick="showPage('login')">Login</a>
+                    </li>
+                    <li class="nav-item" id="registerNav">
+                        <a class="nav-link" href="#" onclick="showPage('register')">Register</a>
+                    </li>
+                    <li class="nav-item" id="registerNav">
+                        <a class="nav-link" href="#" onclick="showPage('admin')">Admin</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Home Page -->
+        <div id="home" class="page" data-page>
+            <!-- Hero Section -->
+            <section class="text-center hero-section">
+                <div class="container">
+                    <h1 class="mb-4 display-4 fw-bold">Discover Amazing Events</h1>
+                    <p class="mb-5 lead">Find and book tickets for the best events happening near you</p>
+                    <div class="mx-auto search-bar">
+                        <div class="input-group">
+                            <input type="text" class="border-0 form-control" placeholder="Search events..." id="heroSearch">
+                            <button class="btn btn-primary" type="button" onclick="searchEvents()">
+                                <i class="bi bi-search"></i> Search
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Featured Events -->
+            <section class="mb-5 container">
+                <h2 class="mb-4 text-center">Featured Events</h2>
+                <div class="row g-4" id="featuredEvents">
+                    <!-- Featured events will be loaded here -->
+                </div>
+                <div class="mt-4 text-center">
+                    <a href="#" class="btn-outline-primary btn" onclick="showPage('events')">View All Events</a>
+                </div>
+            </section>
+
+            <!-- Categories -->
+            <section class="bg-light mb-5 py-5">
+                <div class="container">
+                    <h2 class="mb-4 text-center">Browse by Category</h2>
+                    <div class="justify-content-center row g-4">
+                        <div class="col-6 col-md-4 col-lg-2">
+                            <div class="h-100 text-center card" onclick="filterByCategory('Music')">
+                                <div class="card-body">
+                                    <i class="text-primary bi bi-music-note-beamed"></i>
+                                    <h5 class="mt-3 card-title">Music</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-4 col-lg-2">
+                            <div class="h-100 text-center card" onclick="filterByCategory('Sports')">
+                                <div class="card-body">
+                                    <i class="text-success bi bi-trophy"></i>
+                                    <h5 class="mt-3 card-title">Sports</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-4 col-lg-2">
+                            <div class="h-100 text-center card" onclick="filterByCategory('Arts')">
+                                <div class="card-body">
+                                    <i class="text-danger bi bi-palette"></i>
+                                    <h5 class="mt-3 card-title">Arts</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-4 col-lg-2">
+                            <div class="h-100 text-center card" onclick="filterByCategory('Business')">
+                                <div class="card-body">
+                                    <i class="text-info bi bi-briefcase"></i>
+                                    <h5 class="mt-3 card-title">Business</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-4 col-lg-2">
+                            <div class="h-100 text-center card category-card" onclick="filterByCategory('Food')">
+                                <div class="card-body">
+                                    <i class="text-warning bi bi-cup-hot"></i>
+                                    <h5 class="mt-3 card-title">Food</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-4 col-lg-2">
+                            <div class="h-100 text-center card category-card" onclick="filterByCategory('Tech')">
+                                <div class="card-body">
+                                    <i class="text-secondary bi bi-laptop"></i>
+                                    <h5 class="mt-3 card-title">Tech</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Upcoming Events -->
+            <section class="mb-5 container">
+                <h2 class="mb-4 text-center">Upcoming Events</h2>
+                <div class="row g-4" id="upcomingEvents">
+                    <!-- Upcoming events will be loaded here -->
+                </div>
+            </section>
+        </div>
+
+        <!-- Events Page -->
+        <div id="events" class="page" data-page style="display: none;">
+            <div class="py-5 container">
+                <h1 class="mb-4">All Events</h1>
+                
+                <!-- Search and Filter -->
+                <div class="mb-4 card">
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-search"></i></span>
+                                    <input type="text" class="form-control" placeholder="Search events..." id="eventSearch">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="locationFilter" class="visually-hidden form-label">Location</label>
+                                <select class="form-select" id="locationFilter" title="Filter by location">
+                                    <option value="">All Locations</option>
+                                    <option value="New York">New York</option>
+                                    <option value="Los Angeles">Los Angeles</option>
+                                    <option value="Chicago">Chicago</option>
+                                    <option value="Miami">Miami</option>
+                                    <option value="San Francisco">San Francisco</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <input type="date" class="form-control" id="dateFilter" title="Filter by date" placeholder="Select date">
+                            </div>
+                            <div class="col-md-2">
+                                <button class="w-100 btn btn-primary" onclick="applyFilters()">Filter</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Events List -->
+                <div class="row g-4" id="eventsList">
+                    <!-- Events will be loaded here -->
+                </div>
+                
+                <!-- Pagination -->
+                <nav class="mt-5">
+                    <ul class="justify-content-center pagination">
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1">Previous</a>
+                        </li>
+                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+
+        <!-- Event Details Page -->
+        <div id="eventDetails" class="page" data-page style="display: none;">
+            <div class="py-5 container">           
+                <div class="row g-4">
+                    <div class="col-lg-8">
+                        <img src="" alt="Event Image" class="mb-4 w-100 img-fluid event-detail-img" id="eventDetailImage">
+                        <h1 id="eventDetailTitle">Event Title</h1>
+                        <div class="d-flex flex-wrap gap-2 mb-3">
+                            <span class="bg-primary badge" id="eventDetailCategory">Category</span>
+                            <span class="bg-secondary badge" id="eventDetailDate">Date</span>
+                        </div>
+                        <div class="mb-4">
+                            <p class="lead" id="eventDetailDescription">Event description will appear here.</p>
+                        </div>
+                        
+                        <div class="mb-4 card">
+                            <div class="bg-light card-header">
+                                <h4 class="mb-0">Event Details</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3 row">
+                                    <div class="col-md-6">
+                                        <p><i class="me-2 bi bi-calendar-event"></i> <strong>Date:</strong> <span id="eventDetailFullDate">January 1, 2023</span></p>
+                                        <p><i class="me-2 bi bi-clock"></i> <strong>Time:</strong> <span id="eventDetailTime">7:00 PM</span></p>
+                                        <p><i class="me-2 bi bi-geo-alt"></i> <strong>Venue:</strong> <span id="eventDetailVenue">Venue Name</span></p>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <p><i class="me-2 bi bi-person"></i> <strong>Organizer:</strong> <span id="eventDetailOrganizer">Organizer Name</span></p>
+                                        <p><i class="me-2 bi bi-envelope"></i> <strong>Contact:</strong> <span id="eventDetailContact">contact@example.com</span></p>
+                                        <p><i class="me-2 bi bi-cash"></i> <strong>Price:</strong> <span id="eventDetailPrice">$0</span></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4 card">
+                            <div class="bg-light card-header">
+                                <h4 class="mb-0">Location</h4>
+                            </div>
+                            <div class="card-body">
+                                <div id="map" class="mb-3">
+                                    <!-- Map will be displayed here -->
+                                    <div class="d-flex align-items-center justify-content-center h-100">
+                                        <div class="text-center">
+                                            <i class="bi bi-geo-alt"></i>
+                                            <p class="mt-2">Map location</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p id="eventDetailAddress">123 Event Street, City, State, ZIP</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4">
+                        <div class="sticky-top card" class="d-none">
+                            <div class="bg-primary text-white card-header">
+                                <h4 class="mb-0">Book Tickets</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-4" id="ticketOptions">
+                                    <!-- Ticket options will be loaded here -->
+                                </div>
+                                
+                                <div class="d-grid">
+                                    <button class="btn btn-primary btn-lg" onclick="addToCart()">Add to Cart</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cart Page -->
+        <div id="cart" class="page" data-page style="display: none;">
+            <div class="py-5 container">
+                <h1 class="mb-4">Your Cart</h1>
+                
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="mb-4 card">
+                            <div class="bg-light card-header">
+                                <h4 class="mb-0">Cart Items</h4>
+                            </div>
+                            <div class="card-body">
+                                <div id="cartItems">
+                                    <!-- Cart items will be loaded here -->
+                                    <div class="py-5 text-center" id="emptyCart">
+                                        <i class="bi bi-cart-x"></i>
+                                        <h4 class="mt-3">Your cart is empty</h4>
+                                        <p>Browse our events and add tickets to your cart</p>
+                                        <a href="#" class="btn btn-primary" onclick="showPage('events')">Browse Events</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4">
+                        <div class="sticky-top card" class="d-none">
+                            <div class="bg-primary text-white card-header">
+                                <h4 class="mb-0">Order Summary</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Subtotal:</span>
+                                    <span id="cartSubtotal">$0.00</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Service Fee:</span>
+                                    <span id="cartFee">$0.00</span>
+                                </div>
+                                <hr>
+                                <div class="d-flex justify-content-between mb-4">
+                                    <strong>Total:</strong>
+                                    <strong id="cartTotal">$0.00</strong>
+                                </div>
+                                
+                                <div class="d-grid">
+                                    <button class="btn btn-primary btn-lg" onclick="showPage('checkout')" id="checkoutBtn">Proceed to Checkout</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Order Confirmation Page -->
+            <div class="py-5 container">
+                <div class="mb-5 text-center">
+                    <div class="mb-3 text-success display-1">
+                        <i class="bi bi-check-circle"></i>
+                    </div>
+                    <h1 class="mb-3">Thank You for Your Purchase!</h1>
+                    <p class="lead">Your order has been confirmed and tickets have been sent to your email.</p>
+                    <p>Order #<span id="orderNumber">12345</span></p>
+                </div>
+                
+                <div class="justify-content-center row">
+                    <div class="col-lg-8">
+                        <div class="mb-4 card">
+                            <div class="bg-light card-header">
+                                <h4 class="mb-0">Order Details</h4>
+                            </div>
+                            <div class="card-body">
+                                <div id="confirmationItems">
+                                    <!-- Confirmation items will be loaded here -->
+                                </div>
+                                
+                                <hr>
+                                
+                                <div class="d-flex justify-content-between">
+                                    <strong>Total:</strong>
+                                    <strong id="confirmationTotal">$0.00</strong>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center">
+                            <a href="#" class="me-2 btn btn-primary" onclick="showPage('bookings')">View My Bookings</a>
+                            <a href="#" class="btn-outline-primary btn" onclick="showPage('home')">Return to Home</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Checkout Page -->
+        <div id="checkout" class="page" data-page style="display: none;">
+            <div class="py-5 container">
+                <h1 class="mb-4">Checkout</h1>
+                
+                <div class="row g-4">
+                    <div class="col-lg-8">
+                        <div class="mb-4 card">
+                            <div class="bg-light card-header">
+                                <h4 class="mb-0">Attendee Information</h4>
+                            </div>
+                            <div class="card-body">
+                                <form id="attendeeForm">
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label for="firstName" class="form-label">First Name</label>
+                                            <input type="text" class="form-control" id="firstName" required>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="lastName" class="form-label">Last Name</label>
+                                            <input type="text" class="form-control" id="lastName" required>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="email" class="form-label">Email</label>
+                                            <input type="email" class="form-control" id="email" required>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="phone" class="form-label">Phone</label>
+                                            <input type="tel" class="form-control" id="phone" required>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4 card">
+                            <div class="bg-light card-header">
+                                <h4 class="mb-0">Payment Information</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="alert alert-info">
+                                    <i class="bi bi-info-circle"></i> This is a demo checkout. No actual payment will be processed.
+                                </div>
+                                
+                                <form id="paymentForm">
+                                    <div class="row g-3">
+                                        <div class="col-12">
+                                            <label for="cardName" class="form-label">Name on Card</label>
+                                            <input type="text" class="form-control" id="cardName" required>
+                                        </div>
+                                        <div class="col-12">
+                                            <label for="cardNumber" class="form-label">Card Number</label>
+                                            <input type="text" class="form-control" id="cardNumber" placeholder="XXXX XXXX XXXX XXXX" required>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="expDate" class="form-label">Expiration Date</label>
+                                            <input type="text" class="form-control" id="expDate" placeholder="MM/YY" required>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="cvv" class="form-label">CVV</label>
+                                            <input type="text" class="form-control" id="cvv" placeholder="XXX" required>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4">
+                        <div class="sticky-top card" class="d-none">
+                            <div class="bg-primary text-white card-header">
+                                <h4 class="mb-0">Order Summary</h4>
+                            </div>
+                            <div class="card-body">
+                                <div id="checkoutItems">
+                                    <!-- Checkout items will be loaded here -->
+                                </div>
+                                
+                                <hr>
+                                
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Subtotal:</span>
+                                    <span id="checkoutSubtotal">$0.00</span>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span>Service Fee:</span>
+                                    <span id="checkoutFee">$0.00</span>
+                                </div>
+                                <hr>
+                                <div class="d-flex justify-content-between mb-4">
+                                    <strong>Total:</strong>
+                                    <strong id="checkoutTotal">$0.00</strong>
+                                </div>
+                                
+                                <div class="d-grid">
+                                    <button class="btn btn-primary btn-lg" onclick="completeCheckout()">Complete Purchase</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Login Page -->
+        <div id="login" class="page" data-page style="display: none;">
+            <div class="py-5 container">
+                <div class="justify-content-center row">
+                    <div class="col-md-6 col-lg-5">
+                        <div class="card">
+                            <div class="bg-primary py-3 text-white text-center card-header">
+                                <h3 class="mb-0">Login</h3>
+                            </div>
+                            <div class="p-4 card-body">
+                                <form id="loginForm">
+                                    <div class="mb-3">
+                                        <label for="loginEmail" class="form-label">Email</label>
+                                        <input type="email" class="form-control" id="loginEmail" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="loginPassword" class="form-label">Password</label>
+                                        <input type="password" class="form-control" id="loginPassword" required>
+                                    </div>
+                                    <div class="mb-3 form-check">
+                                        <input type="checkbox" class="form-check-input" id="rememberMe">
+                                        <label class="form-check-label" for="rememberMe">Remember me</label>
+                                    </div>
+                                    <div class="d-grid">
+                                        <button type="button" class="btn btn-primary" onclick="login()">Login</button>
+                                    </div>
+                                </form>
+                                
+                                <div class="mt-3 text-center">
+                                    <a href="#" class="text-decoration-none">Forgot password?</a>
+                                </div>
+                                
+                                <hr>
+                                
+                                <div class="text-center">
+                                    <p>Don't have an account? <a href="#" onclick="showPage('register')" class="text-decoration-none">Register</a></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Register Page -->
+        <div id="register" class="page" data-page style="display: none;">
+            <div class="py-5 container">
+                <div class="justify-content-center row">
+                    <div class="col-md-8 col-lg-6">
+                        <div class="card">
+                            <div class="bg-primary py-3 text-white text-center card-header">
+                                <h3 class="mb-0">Create an Account</h3>
+                            </div>
+                            <div class="p-4 card-body">
+                                <form id="registerForm">
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label for="registerFirstName" class="form-label">First Name</label>
+                                            <input type="text" class="form-control" id="registerFirstName" required>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="registerLastName" class="form-label">Last Name</label>
+                                            <input type="text" class="form-control" id="registerLastName" required>
+                                        </div>
+                                        <div class="col-12">
+                                            <label for="registerEmail" class="form-label">Email</label>
+                                            <input type="email" class="form-control" id="registerEmail" required>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="registerPassword" class="form-label">Password</label>
+                                            <input type="password" class="form-control" id="registerPassword" required>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="registerConfirmPassword" class="form-label">Confirm Password</label>
+                                            <input type="password" class="form-control" id="registerConfirmPassword" required>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="termsCheck" required>
+                                                <label class="form-check-label" for="termsCheck">
+                                                    I agree to the <a href="#" class="text-decoration-none">Terms of Service</a> and <a href="#" class="text-decoration-none">Privacy Policy</a>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="d-grid">
+                                                <button type="button" class="btn btn-primary" onclick="register()">Register</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                                
+                                <hr>
+                                
+                                <div class="text-center">
+                                    <p>Already have an account? <a href="#" onclick="showPage('login')" class="text-decoration-none">Login</a></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- User Dashboard -->
+        <div id="dashboard" class="page" data-page style="display: none;">
+            <div class="container-fluid">
+                <div class="row">
+                    <!-- Sidebar -->
+                    <div class="p-0 col-lg-3 col-xl-2 dashboard-sidebar">
+                        <div class="d-flex flex-column p-3">
+                            <h5 class="mb-4 text-white">User Dashboard</h5>
+                            <ul class="flex-column mb-auto nav nav-pills">
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link active" onclick="showDashboardTab('dashboardOverview')">
+                                        <i class="bi bi-speedometer2"></i> Overview
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link" onclick="showDashboardTab('dashboardBookings')">
+                                        <i class="bi bi-ticket-perforated"></i> My Bookings
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link" onclick="showDashboardTab('dashboardProfile')">
+                                        <i class="bi bi-person"></i> Profile
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link" onclick="logout()">
+                                        <i class="bi-box-arrow-right bi"></i> Logout
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Main Content -->
+                    <div class="p-4 col-lg-9 col-xl-10">
+                        <!-- Dashboard Overview -->
+                        <div id="dashboardOverview" class="dashboard-tab">
+                            <h2 class="mb-4">Dashboard</h2>
+                            
+                            <div class="mb-4 row g-4">
+                                <div class="col-md-4">
+                                    <div class="bg-primary h-100 text-white card">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <div>
+                                                    <h6 class="card-title">Upcoming Events</h6>
+                                                    <h2 class="mb-0" id="upcomingEventsCount">0</h2>
+                                                </div>
+                                                <i class="bi bi-calendar-event"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="bg-success h-100 text-white card">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <div>
+                                                    <h6 class="card-title">Total Bookings</h6>
+                                                    <h2 class="mb-0" id="totalBookingsCount">0</h2>
+                                                </div>
+                                                <i class="bi bi-ticket-perforated"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="bg-info h-100 text-white card">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <div>
+                                                    <h6 class="card-title">Total Spent</h6>
+                                                    <h2 class="mb-0" id="totalSpent">$0</h2>
+                                                </div>
+                                                <i class="bi bi-cash dashboard-icon"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-4 card">
+                                <div class="bg-light card-header">
+                                    <h5 class="mb-0">Upcoming Events</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div id="dashboardUpcomingEvents">
+                                        <!-- Upcoming events will be loaded here -->
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="card">
+                                <div class="bg-light card-header">
+                                    <h5 class="mb-0">Recent Bookings</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div id="dashboardRecentBookings">
+                                        <!-- Recent bookings will be loaded here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Dashboard Bookings -->
+                        <div id="dashboardBookings" class="dashboard-tab" class="d-none">
+                            <h2 class="mb-4">My Bookings</h2>
+                            
+                            <ul class="mb-4 nav nav-tabs">
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="#" onclick="showBookingsTab('upcoming')">Upcoming</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#" onclick="showBookingsTab('past')">Past</a>
+                                </li>
+                            </ul>
+                            
+                            <div id="upcomingBookings" class="bookings-tab">
+                                <!-- Upcoming bookings will be loaded here -->
+                            </div>
+                            
+                            <div id="pastBookings" class="bookings-tab" class="d-none">
+                                <!-- Past bookings will be loaded here -->
+                            </div>
+                        </div>
+                        
+                        <!-- Dashboard Profile -->
+                        <div id="dashboardProfile" class="dashboard-tab" class="d-none">
+                            <h2 class="mb-4">Profile</h2>
+                            
+                            <div class="mb-4 card">
+                                <div class="bg-light card-header">
+                                    <h5 class="mb-0">Personal Information</h5>
+                                </div>
+                                <div class="card-body">
+                                    <form id="profileForm">
+                                        <div class="row g-3">
+                                            <div class="col-md-6">
+                                                <label for="profileFirstName" class="form-label">First Name</label>
+                                                <input type="text" class="form-control" id="profileFirstName" value="John">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="profileLastName" class="form-label">Last Name</label>
+                                                <input type="text" class="form-control" id="profileLastName" value="Doe">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="profileEmail" class="form-label">Email</label>
+                                                <input type="email" class="form-control" id="profileEmail" value="john.doe@example.com" readonly>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="profilePhone" class="form-label">Phone</label>
+                                                <input type="tel" class="form-control" id="profilePhone" value="(123) 456-7890">
+                                            </div>
+                                            <div class="col-12">
+                                                <button type="button" class="btn btn-primary" onclick="updateProfile()">Update Profile</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            
+                            <div class="card">
+                                <div class="bg-light card-header">
+                                    <h5 class="mb-0">Change Password</h5>
+                                </div>
+                                <div class="card-body">
+                                    <form id="passwordForm">
+                                        <div class="row g-3">
+                                            <div class="col-md-12">
+                                                <label for="currentPassword" class="form-label">Current Password</label>
+                                                <input type="password" class="form-control" id="currentPassword">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="newPassword" class="form-label">New Password</label>
+                                                <input type="password" class="form-control" id="newPassword">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="confirmNewPassword" class="form-label">Confirm New Password</label>
+                                                <input type="password" class="form-control" id="confirmNewPassword">
+                                            </div>
+                                            <div class="col-12">
+                                                <button type="button" class="btn btn-primary" onclick="changePassword()">Change Password</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bookings Page -->
+        <div id="bookings" class="page" data-page style="display: none;">
+            <div class="py-5 container">
+                <h1 class="mb-4">My Bookings</h1>
+                
+                <ul class="mb-4 nav nav-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#" onclick="showBookingsTab('upcoming')">Upcoming</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="showBookingsTab('past')">Past</a>
+                    </li>
+                </ul>
+                
+                <div id="bookingsUpcoming" class="bookings-tab">
+                    <!-- Upcoming bookings will be loaded here -->
+                </div>
+                
+                <div id="bookingsPast" class="bookings-tab" class="d-none">
+                    <!-- Past bookings will be loaded here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Dashboard -->
+        <div id="admin" class="page" data-page style="display: none;">
+            <div class="container-fluid">
+                <div class="row">
+                    <!-- Sidebar -->
+                    <div class="p-0 col-lg-3 col-xl-2 dashboard-sidebar">
+                        <div class="d-flex flex-column p-3">
+                            <h5 class="mb-4 text-white">Admin Dashboard</h5>
+                            <ul class="flex-column mb-auto nav nav-pills">
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link active" onclick="showAdminTab('adminOverview')">
+                                        <i class="bi bi-speedometer2"></i> Overview
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link" onclick="showAdminTab('adminEvents')">
+                                        <i class="bi bi-calendar-event"></i> Events
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link" onclick="showAdminTab('adminBookings')">
+                                        <i class="bi bi-ticket-perforated"></i> Bookings
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link" onclick="showAdminTab('adminUsers')">
+                                        <i class="bi bi-people"></i> Users
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link" onclick="showAdminTab('adminReports')">
+                                        <i class="bi bi-graph-up"></i> Reports
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link" onclick="logout()">
+                                        <i class="bi-box-arrow-right bi"></i> Logout
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Main Content -->
+                    <div class="p-4 col-lg-9 col-xl-10">
+                        <!-- Admin Overview -->
+                        <div id="adminOverview" class="admin-tab">
+                            <h2 class="mb-4">Admin Dashboard</h2>
+                            
+                            <div class="mb-4 row g-4">
+                                <div class="col-md-3">
+                                    <div class="bg-primary h-100 text-white card admin-stat-card">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <div>
+                                                    <h6 class="card-title">Total Events</h6>
+                                                    <h2 class="mb-0">12</h2>
+                                                </div>
+                                                <i class="bi bi-calendar-event"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="bg-success h-100 text-white card admin-stat-card">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <div>
+                                                    <h6 class="card-title">Total Bookings</h6>
+                                                    <h2 class="mb-0">48</h2>
+                                                </div>
+                                                <i class="bi bi-ticket-perforated"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="bg-info h-100 text-white card admin-stat-card">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <div>
+                                                    <h6 class="card-title">Total Users</h6>
+                                                    <h2 class="mb-0">24</h2>
+                                                </div>
+                                                <i class="bi bi-people"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="bg-warning h-100 text-dark card admin-stat-card">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <div>
+                                                    <h6 class="card-title">Revenue</h6>
+                                                    <h2 class="mb-0">$4,800</h2>
+                                                </div>
+                                                <i class="bi bi-cash"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row g-4">
+                                <div class="col-md-6">
+                                    <div class="mb-4 card">
+                                        <div class="bg-light card-header">
+                                            <h5 class="mb-0">Recent Bookings</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>ID</th>
+                                                        <th>User</th>
+                                                        <th>Event</th>
+                                                        <th>Date</th>
+                                                        <th>Amount</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>#1234</td>
+                                                        <td>John Doe</td>
+                                                        <td>Summer Music Festival</td>
+                                                        <td>Jun 15, 2023</td>
+                                                        <td>$120</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>#1235</td>
+                                                        <td>Jane Smith</td>
+                                                        <td>Tech Conference 2023</td>
+                                                        <td>Jun 14, 2023</td>
+                                                        <td>$250</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>#1236</td>
+                                                        <td>Mike Johnson</td>
+                                                        <td>Art Exhibition</td>
+                                                        <td>Jun 12, 2023</td>
+                                                        <td>$45</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-4 card">
+                                        <div class="bg-light card-header">
+                                            <h5 class="mb-0">Upcoming Events</h5>
+                                        </div>
+                                        <div class="card-body">
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Event</th>
+                                                        <th>Date</th>
+                                                        <th>Tickets Sold</th>
+                                                        <th>Status</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>Summer Music Festival</td>
+                                                        <td>Jul 15, 2023</td>
+                                                        <td>120/200</td>
+                                                        <td><span class="bg-success badge">Active</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Tech Conference 2023</td>
+                                                        <td>Aug 10, 2023</td>
+                                                        <td>85/150</td>
+                                                        <td><span class="bg-success badge">Active</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Art Exhibition</td>
+                                                        <td>Jul 22, 2023</td>
+                                                        <td>45/100</td>
+                                                        <td><span class="bg-warning badge">Low Sales</span></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Admin Events -->
+                        <div id="adminEvents" class="admin-tab" class="d-none">
+                            <div class="d-flex align-items-center justify-content-between mb-4">
+                                <h2>Events Management</h2>
+                                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addEventModal">
+                                    <i class="bi bi-plus-circle"></i> Add Event
+                                </button>
+                            </div>
+                            
+                            <div class="admin-table card">
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>ID</th>
+                                                    <th>Event Name</th>
+                                                    <th>Date</th>
+                                                    <th>Venue</th>
+                                                    <th>Price</th>
+                                                    <th>Tickets Sold</th>
+                                                    <th>Status</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>1</td>
+                                                    <td>Summer Music Festival</td>
+                                                    <td>Jul 15, 2023</td>
+                                                    <td>Central Park</td>
+                                                    <td>$60</td>
+                                                    <td>120/200</td>
+                                                    <td><span class="bg-success badge">Active</span></td>
+                                                    <td>
+                                                        <button class="me-1 btn-outline-primary btn btn-sm" onclick="editEvent(1)" title="Edit Event">
+                                                            <i class="bi bi-pencil"></i>
+                                                        </button>
+                                                        <button class="btn-outline-danger btn btn-sm" onclick="deleteEvent(1)" title="Edit Event">
+                                                            <i class="bi bi-trash"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>2</td>
+                                                    <td>Tech Conference 2023</td>
+                                                    <td>Aug 10, 2023</td>
+                                                    <td>Convention Center</td>
+                                                    <td>$250</td>
+                                                    <td>85/150</td>
+                                                    <td><span class="bg-success badge">Active</span></td>
+                                                    <td>
+                                                        <button class="me-1 btn-outline-primary btn btn-sm" onclick="editEvent(2)" title="Edit Event">
+                                                            <i class="bi bi-pencil"></i>
+                                                        </button>
+                                                        <button class="btn-outline-danger btn btn-sm" onclick="deleteEvent(2)" title="Edit Event">
+                                                            <i class="bi bi-trash"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>3</td>
+                                                    <td>Art Exhibition</td>
+                                                    <td>Jul 22, 2023</td>
+                                                    <td>City Gallery</td>
+                                                    <td>$45</td>
+                                                    <td>45/100</td>
+                                                    <td><span class="bg-warning badge">Low Sales</span></td>
+                                                    <td>
+                                                        <button class="me-1 btn-outline-primary btn btn-sm" onclick="editEvent(3)" title="Edit Event">
+                                                            <i class="bi bi-pencil"></i>
+                                                        </button>
+                                                        <button class="btn-outline-danger btn btn-sm" onclick="deleteEvent(3)" title="Edit Event">
+                                                            <i class="bi bi-trash"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>4</td>
+                                                    <td>Business Workshop</td>
+                                                    <td>Aug 5, 2023</td>
+                                                    <td>Business Center</td>
+                                                    <td>$120</td>
+                                                    <td>30/50</td>
+                                                    <td><span class="bg-success badge">Active</span></td>
+                                                    <td>
+                                                        <button class="me-1 btn-outline-primary btn btn-sm" onclick="editEvent(4)" title="Edit Event">
+                                                            <i class="bi bi-pencil"></i>
+                                                        </button>
+                                                        <button class="btn-outline-danger btn btn-sm" onclick="deleteEvent(4)" title="Edit Event">
+                                                            <i class="bi bi-trash"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>5</td>
+                                                    <td>Food Festival</td>
+                                                    <td>Jul 29, 2023</td>
+                                                    <td>City Square</td>
+                                                    <td>$35</td>
+                                                    <td>80/100</td>
+                                                    <td><span class="bg-success badge">Active</span></td>
+                                                    <td>
+                                                        <button class="me-1 btn-outline-primary btn btn-sm" onclick="editEvent(5)" title="Edit Event">
+                                                            <i class="bi bi-pencil"></i>
+                                                        </button>
+                                                        <button class="btn-outline-danger btn btn-sm" onclick="deleteEvent(5)" title="Edit Event">
+                                                            <i class="bi bi-trash"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Admin Bookings -->
+                        <div id="adminBookings" class="admin-tab" class="d-none">
+                            <h2 class="mb-4">Bookings Management</h2>
+                            
+                            <div class="mb-4 card">
+                                <div class="card-body">
+                                    <div class="row g-3">
+                                        <div class="col-md-3">
+                                            <label for="bookingEventFilter" class="form-label">Event</label>
+                                            <select class="form-select" id="bookingEventFilter" aria-label="Event">
+                                                <option value="">All Events</option>
+                                                <option value="1">Summer Music Festival</option>
+                                                <option value="2">Tech Conference 2023</option>
+                                                <option value="3">Art Exhibition</option>
+                                                <option value="4">Business Workshop</option>
+                                                <option value="5">Food Festival</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <select class="form-select" id="bookingStatusFilter" aria-label="Event">
+                                                <option value="">All Statuses</option>
+                                                <option value="completed">Completed</option>
+                                                <option value="pending">Pending</option>
+                                                <option value="cancelled">Cancelled</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <input type="date" class="form-control" id="bookingDateFilter" title="Filter by booking date" placeholder="Select date">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <button class="w-100 btn btn-primary" onclick="filterBookings()">Filter</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="admin-table card">
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Booking ID</th>
+                                                    <th>User</th>
+                                                    <th>Event</th>
+                                                    <th>Date</th>
+                                                    <th>Tickets</th>
+                                                    <th>Total</th>
+                                                    <th>Status</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>#1234</td>
+                                                    <td>John Doe</td>
+                                                    <td>Summer Music Festival</td>
+                                                    <td>Jun 15, 2023</td>
+                                                    <td>2</td>
+                                                    <td>$120</td>
+                                                    <td><span class="bg-success badge">Completed</span></td>
+                                                    <td>
+                                                        <button class="btn-outline-primary btn btn-sm" onclick="viewBooking(1234)" title="View Booking">
+                                                            <i class="bi bi-eye"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>#1235</td>
+                                                    <td>Jane Smith</td>
+                                                    <td>Tech Conference 2023</td>
+                                                    <td>Jun 14, 2023</td>
+                                                    <td>1</td>
+                                                    <td>$250</td>
+                                                    <td><span class="bg-success badge">Completed</span></td>
+                                                    <td>
+                                                        <button class="btn-outline-primary btn btn-sm" onclick="viewBooking(1235)" title="View Booking">
+                                                            <i class="bi bi-eye"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>#1236</td>
+                                                    <td>Mike Johnson</td>
+                                                    <td>Art Exhibition</td>
+                                                    <td>Jun 12, 2023</td>
+                                                    <td>1</td>
+                                                    <td>$45</td>
+                                                    <td><span class="bg-success badge">Completed</span></td>
+                                                    <td>
+                                                        <button class="btn-outline-primary btn btn-sm" onclick="viewBooking(1236)" title="View Booking">
+                                                            <i class="bi bi-eye"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>#1237</td>
+                                                    <td>Sarah Williams</td>
+                                                    <td>Business Workshop</td>
+                                                    <td>Jun 10, 2023</td>
+                                                    <td>2</td>
+                                                    <td>$240</td>
+                                                    <td><span class="bg-warning badge">Pending</span></td>
+                                                    <td>
+                                                        <button class="btn-outline-primary btn btn-sm" onclick="viewBooking(1237)" title="View Booking">
+                                                            <i class="bi bi-eye"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>#1238</td>
+                                                    <td>Robert Brown</td>
+                                                    <td>Food Festival</td>
+                                                    <td>Jun 8, 2023</td>
+                                                    <td>3</td>
+                                                    <td>$105</td>
+                                                    <td><span class="bg-danger badge">Cancelled</span></td>
+                                                    <td>
+                                                        <button class="btn-outline-primary btn btn-sm" onclick="viewBooking(1238)" title="View Booking">
+                                                            <i class="bi bi-eye"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Admin Users -->
+                        <div id="adminUsers" class="admin-tab" class="d-none">
+                            <h2 class="mb-4">Users Management</h2>
+                            
+                            <div class="mb-4 card">
+                                <div class="card-body">
+                                    <div class="row g-3">
+                                        <div class="col-md-8">
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="bi bi-search"></i></span>
+                                                <input type="text" class="form-control" placeholder="Search users..." id="userSearch">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <button class="w-100 btn btn-primary" onclick="searchUsers()">Search</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="admin-table card">
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>ID</th>
+                                                    <th>Name</th>
+                                                    <th>Email</th>
+                                                    <th>Registered</th>
+                                                    <th>Bookings</th>
+                                                    <th>Status</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>1</td>
+                                                    <td>John Doe</td>
+                                                    <td>john.doe@example.com</td>
+                                                    <td>May 10, 2023</td>
+                                                    <td>3</td>
+                                                    <td><span class="bg-success badge">Active</span></td>
+                                                    <td>
+                                                        <button class="me-1 btn-outline-primary btn btn-sm" onclick="viewUser(1)" title="View User">
+                                                            <i class="bi bi-eye"></i>
+                                                        </button>
+                                                        <button class="btn-outline-warning btn btn-sm" onclick="toggleUserStatus(1)" title="Toggle User Status">
+                                                            <i class="bi bi-slash-circle"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>2</td>
+                                                    <td>Jane Smith</td>
+                                                    <td>jane.smith@example.com</td>
+                                                    <td>May 12, 2023</td>
+                                                    <td>2</td>
+                                                    <td><span class="bg-success badge">Active</span></td>
+                                                    <td>
+                                                        <button class="me-1 btn-outline-primary btn btn-sm" onclick="viewUser(2)" title="View User">
+                                                            <i class="bi bi-eye"></i>
+                                                        </button>
+                                                        <button class="btn-outline-warning btn btn-sm" onclick="toggleUserStatus(2)" title="Toggle User Status">
+                                                            <i class="bi bi-slash-circle"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>3</td>
+                                                    <td>Mike Johnson</td>
+                                                    <td>mike.johnson@example.com</td>
+                                                    <td>May 15, 2023</td>
+                                                    <td>1</td>
+                                                    <td><span class="bg-success badge">Active</span></td>
+                                                    <td>
+                                                        <button class="me-1 btn-outline-primary btn btn-sm" onclick="viewUser(3)" title="View User">
+                                                            <i class="bi bi-eye"></i>
+                                                        </button>
+                                                        <button class="btn-outline-warning btn btn-sm" onclick="toggleUserStatus(3)" title="Toggle User Status">
+                                                            <i class="bi bi-slash-circle"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>4</td>
+                                                    <td>Sarah Williams</td>
+                                                    <td>sarah.williams@example.com</td>
+                                                    <td>May 18, 2023</td>
+                                                    <td>2</td>
+                                                    <td><span class="bg-warning badge">Inactive</span></td>
+                                                    <td>
+                                                        <button class="me-1 btn-outline-primary btn btn-sm" onclick="viewUser(4)" title="View User">
+                                                            <i class="bi bi-eye"></i>
+                                                        </button>
+                                                        <button class="btn-outline-success btn btn-sm" onclick="toggleUserStatus(4)" title="Toggle User Status">
+                                                            <i class="bi bi-check-circle"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>5</td>
+                                                    <td>Robert Brown</td>
+                                                    <td>robert.brown@example.com</td>
+                                                    <td>May 20, 2023</td>
+                                                    <td>1</td>
+                                                    <td><span class="bg-success badge">Active</span></td>
+                                                    <td>
+                                                        <button class="me-1 btn-outline-primary btn btn-sm" onclick="viewUser(5)" title="View User">
+                                                            <i class="bi bi-eye"></i>
+                                                        </button>
+                                                        <button class="btn-outline-warning btn btn-sm" onclick="toggleUserStatus(5)" title="Toggle User Status>
+                                                            <i class="bi bi-slash-circle"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Admin Reports -->
+                        <div id="adminReports" class="admin-tab" class="d-none">
+                            <h2 class="mb-4">Reports</h2>
+                            
+                            <div class="mb-4 card">
+                                <div class="bg-light card-header">
+                                    <h5 class="mb-0">Generate Report</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row g-3">
+                                        <div class="col-md-4">
+                                            <label for="reportType" class="form-label">Report Type</label>
+                                            <select class="form-select" id="reportType">
+                                                <option value="sales">Sales Report</option>
+                                                <option value="events">Events Report</option>
+                                                <option value="users">Users Report</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="reportStartDate" class="form-label">Start Date</label>
+                                            <input type="date" class="form-control" id="reportStartDate">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+    <script src="scripts.js"></script>
+</body>
+</html>

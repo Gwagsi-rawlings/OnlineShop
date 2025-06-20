@@ -1,0 +1,290 @@
+/* General Styles */
+        :root {
+            --primary-color: #5c2d91;
+            --secondary-color: #ff6b6b;
+            --dark-color: #2c3e50;
+            --light-color: #f8f9fa;
+            --success-color: #28a745;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        
+        .navbar {
+            background-color: var(--primary-color);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            color: white !important;
+        }
+        
+        .nav-link {
+            color: rgba(255, 255, 255, 0.85) !important;
+            font-weight: 500;
+        }
+        
+        .nav-link:hover {
+            color: white !important;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        
+        .btn-primary:hover {
+            background-color: #4a2275;
+            border-color: #4a2275;
+        }
+        
+        .btn-secondary {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+        }
+        
+        .btn-secondary:hover {
+            background-color: #ff5252;
+            border-color: #ff5252;
+        }
+        
+        .card {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .event-card .card-img-top {
+            height: 180px;
+            object-fit: cover;
+        }
+        
+        .hero-section {
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="800" height="400" viewBox="0 0 800 400"><rect width="800" height="400" fill="%235c2d91"/><circle cx="400" cy="200" r="150" fill="%23ff6b6b" opacity="0.3"/><circle cx="200" cy="300" r="100" fill="%23ffbe0b" opacity="0.2"/><circle cx="600" cy="100" r="80" fill="%234361ee" opacity="0.2"/></svg>');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 80px 0;
+            margin-bottom: 30px;
+        }
+        
+        .badge-category {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .badge-price {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        
+        .event-detail-img {
+            max-height: 400px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+        
+        .ticket-card {
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .dashboard-sidebar {
+            background-color: var(--dark-color);
+            color: white;
+            min-height: calc(100vh - 56px);
+        }
+        
+        .dashboard-sidebar .nav-link {
+            color: rgba(255, 255, 255, 0.8) !important;
+            border-radius: 0;
+            padding: 12px 20px;
+        }
+        
+        .dashboard-sidebar .nav-link:hover,
+        .dashboard-sidebar .nav-link.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white !important;
+        }
+        
+        .dashboard-sidebar .nav-link i {
+            margin-right: 10px;
+        }
+        
+        .ticket {
+            position: relative;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .ticket:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -10px;
+            width: 20px;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 10px,
+                white 10px,
+                white 20px
+            );
+        }
+        
+        .qr-code {
+            width: 100px;
+            height: 100px;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+        }
+        
+        .search-bar {
+            background-color: white;
+            border-radius: 50px;
+            padding: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .cart-item {
+            border-left: 3px solid var(--primary-color);
+        }
+        
+        #map {
+            height: 300px;
+            border-radius: 10px;
+            background-color: #e9ecef;
+        }
+        
+        .admin-stat-card {
+            border-radius: 10px;
+            border: none;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .admin-stat-card i {
+            font-size: 2rem;
+        }
+        
+        .admin-table {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.25rem rgba(92, 45, 145, 0.25);
+        }
+        .form-label {
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+        .form-check-input:checked {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        .d-none {
+            display: none !important;
+        }
+        .category-card {
+            cursor: pointer;
+        }
+        .category-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .category-card img {
+            border-radius: 10px;
+            height: 150px;
+            object-fit: cover;
+        }
+        .category-card h5 {
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+        .category-card p {
+            color: var(--dark-color);
+        }
+        .category-card .btn {
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 20px;
+        }
+        .category-card .btn:hover {
+            background-color: #4a2275;
+            color: white;
+        }
+        .footer {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+        .footer a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+        }
+        .footer a:hover {
+            color: white;
+            text-decoration: underline;
+        }
+        .footer p {
+            margin: 0;
+            font-size: 0.9rem;
+        }
+        .footer .social-icons a {
+            margin: 0 10px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.5rem;
+        }
+        .footer .social-icons a:hover {
+            color: white;
+        }
+        .footer .social-icons {
+            margin-top: 10px;
+        }
+        .footer .social-icons i {
+            transition: color 0.3s ease;
+        }
+        .footer .social-icons i:hover {
+            color: var(--secondary-color);
+        }
+        .search-bar {
+            max-width: 600px;
+        }
+        /* Add your custom styles here */
+        #userDropdown {
+            display: none;
+        }
+        @media (max-width: 768px) {
+            .navbar-brand {
+                font-size: 1.5rem;
+            }
+            .nav-link {
+                font-size: 0.9rem;
+            }
+            .hero-section {
+                padding: 60px 0;
+            }
+            .event-card .card-img-top {
+                height: 150px;
+            }
+        }
+        /* Hide pages by default using Bootstrap's d-none class or custom class if needed */
+        .page.d-none {
+            display: none !important;
+        }
+        
+        
